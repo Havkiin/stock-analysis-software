@@ -1,0 +1,12 @@
+Login: Hello, Password: World
+Login: Cory, Password: Hills
+Login: martin, Password: pass
+Login: johanne, Password: kiwi
+Login: siegfried, Password: brunhild
+Login: Kiwi, Password: kiwi
+<<<<<<< HEAD
+=======
+Login: kiki, Password: kolo
+Login:  mmmmmm, Password: xcxnb
+Login: adasda, Password: dasdasd
+>>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
