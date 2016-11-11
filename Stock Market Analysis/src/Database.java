@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-/**Database methods done by Clement Hennebelle.
- *Reading and writing to a file done by Su Ming Paquette M.
- * 
-=======
 /**
  * Created by C. Hennebelle.
  * Reads the user information from the file "userLoginFile.text" and parses it to store the information in an array that
@@ -10,7 +5,6 @@
  * Checks to make sure that the user can log in if they have an account, or adds their account to the database (text file)
  * if they are new.
  * Last update: November 4, 2016.
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
  */
 
 import java.io.BufferedReader;
@@ -50,16 +44,9 @@ public class Database{
 			users = new LinkedList<User>(); //stores the user login information.
 
 			while((line = bufferedReader.readLine()) != null) 
-			{               
-<<<<<<< HEAD
-				String[] loginInformation = line.split("[\\s,;]+"); //splits the line into two from the comma. 
-
-				//information[0] is the username, information[1] is the password.
-=======
-				String[] loginInformation = line.split("[\\s,;]+"); //splits the line into 4 parts. 
+			{     				String[] loginInformation = line.split("[\\s,;]+"); //splits the line into 4 parts. 
 
 				//information[1] is the username, information[3] is the password.
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 				users.add(new User(loginInformation[1], loginInformation[3]));
 
 			}   

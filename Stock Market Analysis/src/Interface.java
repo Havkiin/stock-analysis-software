@@ -1,58 +1,3 @@
-<<<<<<< HEAD
-/**Interface class created by Clement Hennebelle.
- * GUI implementation done by Su Ming Paquette.
- * 
- */
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.*;
-
-public class Interface extends JFrame{
-
-	private static Database database = new Database();
-	private String theUser = null; //Stores the user name of whoever is using it.
-
-	//Universal container to load components.
-	private Container contain;
-
-	//Different panels to redraw in container.
-	private JPanel openingPanel, loginPanel, createPanel, menuOptionsPanel;
-
-	//Opening page variables with messages, login button and create button.
-	private JLabel openingMessage = new JLabel("Welcome to our Stock Analysis Software!", SwingConstants.CENTER);
-	private JLabel openingMessage2 = new JLabel("Click below to login", SwingConstants.CENTER);
-	private JLabel openingMessage3 = new JLabel("Have no account? Click below to get one!", SwingConstants.CENTER);
-	private JButton loginButton = new JButton("Login");
-	private JButton createButton = new JButton("Create");
-
-	//Login page variables with messages, log in button, and text fields to enter answers.
-	private JLabel loginOpeningMessage = new JLabel("Login Page", SwingConstants.CENTER);
-	private JLabel displayingUserName = new JLabel("User Name:", SwingConstants.CENTER);
-	private JLabel displayingPassword = new JLabel("Password:", SwingConstants.CENTER);
-	private JButton blogin = new JButton("Login");
-	private JTextField txuser = new JTextField(15);
-	private JPasswordField pass = new JPasswordField(15);
-
-	//Create page variables with message, create button and two text fields for the answers.
-	private JLabel createOpeningMessage = new JLabel("Creating An Account Page", SwingConstants.CENTER);
-	private JButton bcreate = new JButton("Create");
-	private JTextField usernameChosen = new JTextField(15);
-	private JPasswordField passwordChosen = new JPasswordField(15);
-	
-	//Application Option page variables with message, and many buttons for features or logout.
-	private JLabel optionOpeningMessage;
-	private JButton brecent = new JButton("View Most Recent");  //not used yet.
-	private JButton bgraph = new JButton("View Buy/Sell Graphs");
-	private JButton bhisdata = new JButton("View Historical Data");  //not used yet.
-	private JButton blogout = new JButton("Logout");	
-
-	//Constructor that sets up the initial welcoming screen.
-	public Interface() 
-	{
-		super("Stock Analysis");
-=======
 /**Interface class created by C. Hennebelle.
  * GUI implementation done by S. Paquette.
  * Creates GUI for user to interact with program such as opening page, login page, creation page, menu page,
@@ -119,7 +64,6 @@ public class Interface extends JFrame{
 	public Interface() 
 	{
 		super("Stock Analysis Software");
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 		openingPanel = new JPanel();
 		setSize(600,600);
 		setLocation(350,100);
@@ -140,22 +84,14 @@ public class Interface extends JFrame{
 		getContentPane().add(openingPanel);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-<<<<<<< HEAD
-		begin();  //Will perform an action when user pressed one of two buttons on the screen.
-=======
 		begin();  //Will perform an action when user pressed one of two buttons (login or create) on the screen.
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 	}
 
 	public static void main (String[] args) //starts the application and GUI.
 	{
 		Interface i = new Interface();	
 	}
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 	//method to get action listeners of when user either picks to log in or create an account 
 	//at the beginning of the application.
 	public void begin()
@@ -166,11 +102,6 @@ public class Interface extends JFrame{
 			public void actionPerformed(ActionEvent ae) 
 			{
 				contain = getContentPane();
-<<<<<<< HEAD
-				
-=======
-
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 				loginPanel = new JPanel(null);
 				loginPanel.setSize(500,200);
 				loginPanel.setLocation(500,280);
@@ -203,11 +134,6 @@ public class Interface extends JFrame{
 			public void actionPerformed(ActionEvent e) 
 			{
 				contain = getContentPane();
-<<<<<<< HEAD
-				
-=======
-
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 				createPanel = new JPanel(null);
 				createPanel.setSize(500,200);
 				createPanel.setLocation(500,280);
@@ -270,9 +196,6 @@ public class Interface extends JFrame{
 				String puname = usernameChosen.getText();
 				String ppaswd = passwordChosen.getText();
 
-<<<<<<< HEAD
-				if (database.createAccount(puname, ppaswd)) //Checks database if user name already exists. 
-=======
 				if (puname.length() > 15)
 				{
 					//Displays an error message to the user and starts the process over again.							
@@ -290,7 +213,6 @@ public class Interface extends JFrame{
 					usernameChosen.requestFocus();
 				}
 				else if (database.createAccount(puname, ppaswd)) //Checks database if user name already exists. 
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 				{
 					theUser = puname;
 					userOptions();     //if user name has not been taken, user's account is created and is logged in.
@@ -306,11 +228,6 @@ public class Interface extends JFrame{
 			}
 		});
 	}
-<<<<<<< HEAD
-		
-=======
-
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 	//method to display menu option screen when user logs in, finishes creating an account or finishes something else.
 	public void userOptions()
 	{
@@ -320,63 +237,6 @@ public class Interface extends JFrame{
 
 		String message = "Welcome " + theUser + ", please feel free to pick any of the options below:";
 		optionOpeningMessage = new JLabel(message);
-<<<<<<< HEAD
-		
-		optionOpeningMessage.setBounds(120,50,400,50);
-		bgraph.setBounds(190,280,200,20);
-		blogout.setBounds(210,500,150,20);
-
-		menuOptionsPanel.add(optionOpeningMessage);
-		menuOptionsPanel.add(bgraph);
-		menuOptionsPanel.add(blogout);
-
-		contain.removeAll(); //removes the previous panel and adds this one (to show new screen).
-		contain.add(menuOptionsPanel);
-		contain.validate();
-		contain.repaint();
-		setVisible(true);
-		pickingAnOption();
-	}
-	
-	//method to get action listeners when selecting an option in the menu.
-	public void pickingAnOption()
-	{
-		//loads a logout screen when logout button is pressed.
-		blogout.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				JPanel closingPanel = new JPanel(null);
-				closingPanel.setSize(600,600);
-				closingPanel.setLocation(350,100);
-				
-				JLabel closingMessage = new JLabel("Thank you for using our Stock Analysis Software!", SwingConstants.CENTER);
-				JLabel closingMessage2 = new JLabel("We hope you enjoyed the application!", SwingConstants.CENTER);
-				
-				closingMessage.setBounds(100,50,400,50);
-				closingMessage2.setBounds(100,500,400,50);
-				
-				closingPanel.add(closingMessage);
-				closingPanel.add(closingMessage2);
-				
-				contain.removeAll(); //removes the previous panel and adds this one (to show logout screen).
-				contain.add(closingPanel);
-				contain.validate();
-				contain.repaint();
-				setVisible(true);				
-			}
-		});
-		
-		//Not implemented yet, but this is going to display graphs later.
-		bgraph.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-							
-			}
-		});
-=======
-
 		optionOpeningMessage.setBounds(120,50,400,50);
 		bgraph.setBounds(190,280,200,20);
 		blogout.setBounds(210,500,150,20);
@@ -628,6 +488,5 @@ public class Interface extends JFrame{
 	public void displayGraph(double[] maDataset, double[] histDataset, String[] dateNameofdataset, int timePeriod)
 	{
 		Graph graph = new Graph("Simple Moving Average Graph", maDataset, histDataset, dateNameofdataset, timePeriod);
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 	}
 }

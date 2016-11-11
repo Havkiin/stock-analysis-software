@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-/**User class done by Clement Hennebelle.
- * 
- */
-=======
 /**
  * Created by C. Hennebelle.
  * Stores the user information such as usernames and passwords that have been created by previous users.
  * Last update: November 4, 2016.
  */
-
->>>>>>> 8bef7debad0f51d0a1b74712a3869c60b4e1fcb1
 public class User {
 	
 	private String login;
