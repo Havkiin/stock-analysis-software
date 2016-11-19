@@ -3,10 +3,10 @@ package utility;
 import java.util.ArrayList;
 
 /**
- * Created by m.ding on 2016-10-30.
- * <p>
+ * Created by M. Ding on 2016-10-30.
  * ArrayOperations class is used to do basic operations between
  * 2 or more arrays.
+ * Last update: 2016-11-18
  */
 public class ArrayOperations {
 
