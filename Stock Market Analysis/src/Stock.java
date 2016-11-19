@@ -34,7 +34,10 @@ public class Stock
 	}*/ // commented by M. Ding. This is a test file for Iteration #1
 
     /**
+     * added by M. Ding
      * Constructor that map the stock name to stock code (DOW 30)
+     * Ref: http://finance.yahoo.com/quote/%5EDJI/components?p=%5EDJI
+     * Last update: November 18, 2016
      */
     public Stock() {
         stockCode.put("Exxon Mobil Corporation (XOM)", "XOM");
