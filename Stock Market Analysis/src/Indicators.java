@@ -3,9 +3,9 @@ import utility.ArrayOperations;
 import java.util.ArrayList;
 
 /**
- * Created by m.ding on 2016-10-30.
- * <p>
+ * Created by M. Ding on 2016-10-30.
  * a class containing some indicators for buy/sell decision.
+ * Last update: 2016-11-18
  */
 public class Indicators {
     /**
