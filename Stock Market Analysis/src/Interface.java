@@ -28,9 +28,10 @@ public class Interface extends JFrame{
 	//Opening page variables with messages, login button and create button.
 	private JLabel openingMessage = new JLabel("Welcome to our Stock Analysis Software!", SwingConstants.CENTER); //message
 	private JLabel openingMessage2 = new JLabel("Click below to login", SwingConstants.CENTER); //message
-	private JLabel openingMessage3 = new JLabel("Have no account? Click below to get one!", SwingConstants.CENTER); //message
+	private JLabel openingMessage3 = new JLabel("No account? Click below to get one!", SwingConstants.CENTER); //message
 	private JButton loginButton = new JButton("Login"); //Button to go to login page
 	private JButton createButton = new JButton("Create"); //Button to go to creation page
+	private JButton goBackMain = new JButton("Go Back"); //Button to go back to the main menu from login/create
 
 	//Login page variables with messages, log in button, and text fields to enter answers.
 	private JLabel loginOpeningMessage = new JLabel("Login Page", SwingConstants.CENTER); //Welcoming message
@@ -112,6 +113,7 @@ public class Interface extends JFrame{
 				txuser.setBounds(210,200,150,20);
 				pass.setBounds(210,290,150,20);
 				blogin.setBounds(250,340,80,20);
+				goBackMain.setBounds(10,10,100,20);
 
 				loginPanel.add(loginOpeningMessage);
 				loginPanel.add(displayingUserName);
@@ -119,6 +121,7 @@ public class Interface extends JFrame{
 				loginPanel.add(blogin);
 				loginPanel.add(txuser);
 				loginPanel.add(pass);
+				loginPanel.add(goBackMain);
 
 				contain.removeAll(); //removes the previous panel and adds this one (to show login screen).
 				contain.add(loginPanel);
@@ -144,6 +147,7 @@ public class Interface extends JFrame{
 				usernameChosen.setBounds(210,200,150,20);
 				passwordChosen.setBounds(210,290,150,20);
 				bcreate.setBounds(250,340,80,20);
+				goBackMain.setBounds(10,10,100,20);
 
 				createPanel.add(createOpeningMessage);
 				createPanel.add(displayingUserName);
@@ -151,6 +155,7 @@ public class Interface extends JFrame{
 				createPanel.add(bcreate);
 				createPanel.add(usernameChosen);
 				createPanel.add(passwordChosen);
+				createPanel.add(goBackMain);
 
 				contain.removeAll(); //removes the previous panel and adds this one (to show creation screen).
 				contain.add(createPanel);
@@ -158,6 +163,36 @@ public class Interface extends JFrame{
 				contain.repaint();
 				setVisible(true);
 				actionCreate();
+			}
+		});
+		
+		goBackMain.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				contain = getContentPane();
+				openingPanel = new JPanel();
+				setSize(600,600);
+				setLocation(350,100);
+				openingPanel.setLayout(null);
+
+				openingMessage.setBounds(120,50,350,50);
+				openingMessage2.setBounds(110,360,350,50);
+				loginButton.setBounds(210,410,150,20);
+				openingMessage3.setBounds(120,450,350,50);
+				createButton.setBounds(210,500,150,20);
+
+				openingPanel.add(openingMessage);
+				openingPanel.add(openingMessage2);
+				openingPanel.add(loginButton);
+				openingPanel.add(openingMessage3);
+				openingPanel.add(createButton);
+				
+				contain.removeAll(); //removes the previous panel and adds this one (to show creation screen).
+				contain.add(openingPanel);
+				contain.validate();
+				contain.repaint();
+				setVisible(true);
 			}
 		});
 	}
