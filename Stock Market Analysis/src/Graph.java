@@ -67,11 +67,11 @@ public class Graph extends JFrame
 		for(int i = 0; i < datasetXAxis.length; i++)
 		{
 			//Turns the date (String) into a Date type so that it can be graphed on the time series.
-			String[] parsingDate = datasetXAxis[i].split("/");
+			String[] parsingDate = datasetXAxis[i].split("-");
 
-			int year = Integer.parseInt(parsingDate[2]);
-			int month = Integer.parseInt(parsingDate[0]);
-			int day = Integer.parseInt(parsingDate[1]);
+			int year = Integer.parseInt(parsingDate[0]);
+			int month = Integer.parseInt(parsingDate[1]);
+			int day = Integer.parseInt(parsingDate[2]);
 
 			current = new Day(day, month, year);
 			series1.add(current, datasetYAxis[i]);

@@ -12,6 +12,7 @@ import utility.ArrayOperations;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Interface extends JFrame{
 
@@ -57,9 +58,12 @@ public class Interface extends JFrame{
 	//Graph page when choosing date and time for moving averages.
 	private JLabel graphWelcomingMessage = new JLabel("Creating Moving Average Graph Page", SwingConstants.CENTER); //Welcoming message
 	private JButton goBack = new JButton("Go Back"); //Button to go back to menu
-	private String[] years = new String[55], timePeriod = {"20 days", "50 days", "100 days", "200 days"}; //Options for combo boxes
+	private String[] stocks = new String[30], timePeriod = {"20 days", "50 days", "100 days", "200 days"}; //Options for combo boxes
 	private JButton bgraph2 = new JButton("Graph"); //Button to graph the user's preference in historical data and moving average.
-	private String[] graphConditions = {"1962","1 year", "20 days"}, historicalData = {"1 year", "2 years", "5 years", "All years"}; //Options for combo box
+	private String[] graphConditions = {"Exxon Mobil Corporation (XOM)","1 year", "20 days"}, historicalData = {"1 year", "2 years", "5 years", "All years"}; //Options for combo box
+	private JTextField startYear = new JTextField(10); //Field to enter the starting year for graph
+	private JTextField startMonth = new JTextField(10); //Field to enter the starting month for graph
+	private JTextField startDay = new JTextField(10); //Field to enter the starting day for graph
 
 	//Constructor that sets up the initial welcoming screen.
 	public Interface() 
@@ -165,7 +169,7 @@ public class Interface extends JFrame{
 				actionCreate();
 			}
 		});
-		
+
 		goBackMain.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -187,7 +191,7 @@ public class Interface extends JFrame{
 				openingPanel.add(loginButton);
 				openingPanel.add(openingMessage3);
 				openingPanel.add(createButton);
-				
+
 				contain.removeAll(); //removes the previous panel and adds this one (to show creation screen).
 				contain.add(openingPanel);
 				contain.validate();
@@ -322,22 +326,29 @@ public class Interface extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JLabel tellUserToEnterLatestYear = new JLabel("Pick a year:");
+				JLabel tellUserToEnterStock = new JLabel("Pick a stock:");
+				JLabel tellUserToEnterDate = new JLabel("Enter a starting date:");
+				JLabel tellUserToEnterTheYear = new JLabel("Year:");
+				startYear.setText("YYYY");
+				JLabel tellUserToEnterMonth = new JLabel("Month:");
+				startMonth.setText("MM");
+				JLabel tellUserToEnterDay = new JLabel("Day:");
+				startDay.setText("DD");
 				JLabel tellUserToEnterYear = new JLabel("See historical data within the last:");
 				JLabel tellUserToChooseTime = new JLabel("Pick moving average predefined as:");
 
-				for(int i = 1962, j = 0; i < 2017;j++, i++)
-					years[j] = Integer.toString(i);
+				for(int i = 0; i < 30; i++)
+					stocks[i] = stock.getStockCodeNames()[i];
 
 				//Create a combo box for every year in the data set and lets user choose option.
-				JComboBox yearList = new JComboBox(years);
-				yearList.addActionListener(new ActionListener() 
+				JComboBox stockList = new JComboBox(stocks);
+				stockList.addActionListener(new ActionListener() 
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
 						JComboBox cb = (JComboBox)e.getSource();
-						String year = (String)cb.getSelectedItem();	
-						graphConditions[0] = year;
+						String stock = (String)cb.getSelectedItem();	
+						graphConditions[0] = stock;
 					}
 				});
 
@@ -372,21 +383,35 @@ public class Interface extends JFrame{
 
 				graphWelcomingMessage.setBounds(150,40,300,50);
 				goBack.setBounds(10,10,100,20);
-				tellUserToEnterLatestYear.setBounds(75,100,100,50);
-				yearList.setBounds(150,112,100,20);
-				tellUserToEnterYear.setBounds(60,150,400,20);
-				numOfYearsList.setBounds(270,150,100,20);
-				tellUserToChooseTime.setBounds(100,470,400,20);
-				timeSpanList.setBounds(100,500,150,20);
+				tellUserToEnterStock.setBounds(50,100,100,50);
+				stockList.setBounds(135,115,310,20);
+				tellUserToEnterDate.setBounds(50,145,150,50);
+				tellUserToEnterTheYear.setBounds(50,180,100,50);
+				startYear.setBounds(90,195,50,20);
+				tellUserToEnterMonth.setBounds(200,180,100,50);
+				startMonth.setBounds(250,195,50,20);
+				tellUserToEnterDay.setBounds(360,180,100,50);
+				startDay.setBounds(400,195,50,20);
+				tellUserToEnterYear.setBounds(50,250,400,20);
+				numOfYearsList.setBounds(255,250,100,20);
+				tellUserToChooseTime.setBounds(50,470,400,20);
+				timeSpanList.setBounds(60,500,150,20);
 				bgraph2.setBounds(350,500,200,20);
 
 				graphPanel.add(graphWelcomingMessage);
 				graphPanel.add(goBack);
-				graphPanel.add(tellUserToEnterLatestYear);
+				graphPanel.add(tellUserToEnterStock);
+				graphPanel.add(tellUserToEnterDate);
+				graphPanel.add(tellUserToEnterTheYear);
+				graphPanel.add(startYear);
+				graphPanel.add(tellUserToEnterMonth);
+				graphPanel.add(startMonth);
+				graphPanel.add(tellUserToEnterDay);
+				graphPanel.add(startDay);
 				graphPanel.add(tellUserToEnterYear);
 				graphPanel.add(numOfYearsList);
 				graphPanel.add(tellUserToChooseTime);
-				graphPanel.add(yearList);
+				graphPanel.add(stockList);
 				graphPanel.add(timeSpanList);
 				graphPanel.add(bgraph2);
 
@@ -397,7 +422,7 @@ public class Interface extends JFrame{
 				setVisible(true);		
 			}
 		});
-		
+
 		//Action listener for when the user presses the graph button on the graphing page to start
 		//plotting the historical data chosen by the user. It starts calculating the MA if the time time span is 
 		//within the range of the data set.
@@ -405,37 +430,95 @@ public class Interface extends JFrame{
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				int month = 0, day = 0;
+				if(startMonth.getText().charAt(0) == '0') {
+					String monthString = startMonth.getText();
+					month = Integer.parseInt(monthString.valueOf(1));
+				}
+				else
+				{
+					month = Integer.parseInt(startMonth.getText());
+				}
+
+				if(startDay.getText().charAt(0) == '0') {
+					String dayString = startMonth.getText();
+					day = Integer.parseInt(dayString.valueOf(1));
+				}
+				else
+				{
+					day = Integer.parseInt(startDay.getText());
+				}
+
 				//year-month-day format
-				int year = Integer.parseInt(graphConditions[0]);
+				int year = Integer.parseInt(startYear.getText());
 				String[] temp = graphConditions[1].split(" ");
 				int numOfYears = 0;
 
-				//Turns the string of options into integers to calculate in the difference in years.
+				//Turns the string of options into integers to calculate the difference in years.
 				if(temp[0].equals("All"))
-					numOfYears = year - 1962;
+					numOfYears = 20;
 				else if(temp[0].equals("1"))
-					numOfYears = 0;
-				else if(temp[0].equals("2"))
 					numOfYears = 1;
+				else if(temp[0].equals("2"))
+					numOfYears = 2;
 				else if(temp[0].equals("5"))
-					numOfYears = 4;
-				
-				int yearMinusnumOfYears = year - numOfYears; //The difference between historical data time span and year chosen.
+					numOfYears = 5;
 
-				if(yearMinusnumOfYears >= 1962 && yearMinusnumOfYears <= 2016) //Within the years in the data set.
+				int yearMinusnumOfYears = year - numOfYears; //The difference between historical data time span and year chosen.
+				
+				if(month > 12 || month < 1)
 				{
-					//calculate the moving average
-					try {
-						calculatingMA(year, yearMinusnumOfYears); //Calculates the MA of the historical data.
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					//Shows error to user when user picked an invalid date.
+					JOptionPane.showMessageDialog(null,"The input for the month is wrong");
+					startYear.setText("");
+					startMonth.setText("");
+					startDay.setText("");
+				}
+				else if(day > 31 || day < 1)
+				{
+					JOptionPane.showMessageDialog(null,"The input for the day is wrong");
+					startYear.setText("");
+					startMonth.setText("");
+					startDay.setText("");
+				}
+				else if(day >= 1 && day <= 31)
+				{
+					if(month == 2 && day > 28)
+					{
+						//Shows error to user when user picked an invalid date.
+						JOptionPane.showMessageDialog(null,"Date doesn't exist");
+						startYear.setText("");
+						startMonth.setText("");
+						startDay.setText("");
+					}
+					else if ((month == 4 || month == 6 || month == 9 || month == 11)
+							&& day > 30)
+					{	
+						//Shows error to user when user picked an invalid date.
+						JOptionPane.showMessageDialog(null,"Date doesn't exist");
+						startYear.setText("");
+						startMonth.setText("");
+						startDay.setText("");
+					}
+					else if((yearMinusnumOfYears >= 1900 && yearMinusnumOfYears <= 2016))
+					{
+
+						//calculate the moving average
+						try {
+							calculatingMA(year, yearMinusnumOfYears, month, day); //Calculates the MA of the historical data.
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 				else
 				{
 					//Shows error to user when user picked an invalid date.
-					JOptionPane.showMessageDialog(null,"Cannot go back " + numOfYears + " years from here");
+					JOptionPane.showMessageDialog(null,"The input for Year, Month or Day is wrong");
+					startYear.setText("");
+					startMonth.setText("");
+					startDay.setText("");
 				}
 
 			}
@@ -471,21 +554,18 @@ public class Interface extends JFrame{
 	}
 
 	//Method to calculate the moving average by taking the starting year and time span of the historical data.
-	public void calculatingMA(int year, int startingYearOnGraph) throws IOException
+	public void calculatingMA(int year, int startingYearOnGraph, int month, int day) throws IOException
 	{
+		//create a CSV file from yahoo API based on user's desired inputs
+		stock.getStockDataFromYahoo(graphConditions[0], Integer.toString(startingYearOnGraph), Integer.toString(month), Integer.toString(day), 
+				Integer.toString(year), Integer.toString(month), Integer.toString(day));
+
 		//Used to figure out the number of data for this particular graph by going through the years defined by user.
 		int tempCounter = 0; //stores number of data points.
-		
+
 		for(int i = stock.getAllClosingPrices().size() - 1; i >= 0; i--)			
 		{
-			if(stock.getAllClosingPrices().get(i) != null 
-					&& stock.getAllClosingPrices().get(i).getYear() >= startingYearOnGraph 
-					&& stock.getAllClosingPrices().get(i).getYear() <= year)
-			{
-				tempCounter++;
-			}
-			else if(stock.getAllClosingPrices().get(i).getYear() == year+1)
-				break;	
+			tempCounter++;
 		}
 
 		MovingAverages ma = new MovingAverages();//used to access method to calculate the ma.
@@ -497,21 +577,13 @@ public class Interface extends JFrame{
 
 		for(int i = stock.getAllClosingPrices().size() - 1; i >= 0; i--)			
 		{
-			if(stock.getAllClosingPrices().get(i) != null 
-					&& stock.getAllClosingPrices().get(i).getYear() >= startingYearOnGraph 
-					&& stock.getAllClosingPrices().get(i).getYear() <= year)
-			{
-				//store every close price in data set within the graph range.
-				closingPricesdataset[counter] = stock.getAllClosingPrices().get(i).getClose();
+			//store every close price in data set within the graph range.
+			closingPricesdataset[counter] = stock.getAllClosingPrices().get(i).getClose();
 
-				//Store every date within the data set of the graph.
-				dateNameofdataset[counter] = stock.getAllClosingPrices().get(i).getDate();
+			//Store every date within the data set of the graph.
+			dateNameofdataset[counter] = stock.getAllClosingPrices().get(i).getDate();
 
-				counter++;
-
-			}
-			else if(stock.getAllClosingPrices().get(i).getYear() == year+1)
-				break;		
+			counter++;
 		}
 
 		double[] datasetForMovingAverage = ma.simpleMovingAverage(closingPricesdataset, timeSpanMovingAverage); //calculates

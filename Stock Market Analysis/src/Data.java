@@ -19,11 +19,11 @@ public class Data
 	{
 		this.date = date;
 		
-		String[] parsingDate = date.split("/");
+		String[] parsingDate = date.split("-");
 		
-		year = Integer.parseInt(parsingDate[2]);
-		month = Integer.parseInt(parsingDate[0]);
-		day = Integer.parseInt(parsingDate[1]);
+		year = Integer.parseInt(parsingDate[0]);
+		month = Integer.parseInt(parsingDate[1]);
+		day = Integer.parseInt(parsingDate[2]);
 	}
 	
 	//Setter for open prices

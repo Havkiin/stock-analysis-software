@@ -18,20 +18,15 @@ import java.util.LinkedList;
 
 public class Stock
 {
-	public static HashMap<String, String> stockCode = new HashMap<String, String>();
+	private static HashMap<String, String> stockCode = new HashMap<String, String>();
+	private String stockNames[] = new String[30]; //To get a list of names of stocks
 
 	//Input file which needs to be parsed
-	String fileToParse = "Sample data.csv";
+	String fileToParse = "CurrentData.csv";
 	BufferedReader fileReader = null;
 
 	//List of Users with an account.
-	private LinkedList<Data> datesWithData = new LinkedList<Data>();
-
-	//Default constructor that will take a CSV file and start to parse it.
-	/*public Stock()
-	{
-		parseCSVLineByLine(fileToParse);
-	}*/ // commented by M. Ding. This is a test file for Iteration #1
+	private LinkedList<Data> datesWithData;
 
     /**
      * added by M. Ding
@@ -41,35 +36,66 @@ public class Stock
      */
     public Stock() {
         stockCode.put("Exxon Mobil Corporation (XOM)", "XOM");
+        stockNames[0] = "Exxon Mobil Corporation (XOM)";
         stockCode.put("Apple Inc. (AAPL)", "AAPL");
+        stockNames[1] = "Apple Inc. (AAPL)";
         stockCode.put("3M Company (MMM)", "MMM");
+        stockNames[2] = "3M Company (MMM)";
         stockCode.put("United Technologies Corporation (UTX)", "UTX");
+        stockNames[3] = "United Technologies Corporation (UTX)";
         stockCode.put("Intel Corporation (INTC)", "INTC");
+        stockNames[4] = "Intel Corporation (INTC)";
         stockCode.put("Visa Inc. (V)", "V");
+        stockNames[5] = "Visa Inc. (V)";
         stockCode.put("Cisco Systems, Inc. (CSCO)", "CSCO");
+        stockNames[6] = "Cisco Systems, Inc. (CSCO)";
         stockCode.put("The Goldman Sachs Group, Inc. (GS)", "GS");
+        stockNames[7] = "The Goldman Sachs Group, Inc. (GS)";
         stockCode.put("Johnson & Johnson (JNJ)", "JNJ");
+        stockNames[8] = "Johnson & Johnson (JNJ)";
         stockCode.put("International Business Machines Corporation (IBM)", "IBM");
+        stockNames[9] = "International Business Machines Corporation (IBM)";
         stockCode.put("General Electric Company (GE)", "GE");
+        stockNames[10] = "General Electric Company (GE)";
         stockCode.put("JPMorgan Chase & Co. (JPM)", "JPM");
+        stockNames[11] = "JPMorgan Chase & Co. (JPM)";
         stockCode.put("McDonald's Corp. (MCD)", "MCD");
+        stockNames[12] = "McDonald's Corp. (MCD)";
         stockCode.put("The Home Depot, Inc. (HD)", "HD");
+        stockNames[13] = "The Home Depot, Inc. (HD)";
         stockCode.put("Caterpillar Inc. (CAT)", "CAT");
+        stockNames[14] = "Caterpillar Inc. (CAT)";
         stockCode.put("E. I. du Pont de Nemours and Company (DD)", "DD");
+        stockNames[15] = "E. I. du Pont de Nemours and Company (DD)";
         stockCode.put("Microsoft Corporation (MSFT)", "MSFT");
+        stockNames[16] = "Microsoft Corporation (MSFT)";
         stockCode.put("Verizon Communications Inc. (VZ)", "VZ");
+        stockNames[17] = "Verizon Communications Inc. (VZ)";
         stockCode.put("The Coca-Cola Company (KO)", "KO");
+        stockNames[18] = "The Coca-Cola Company (KO)";
         stockCode.put("The Travelers Companies, Inc. (TRV)", "TRV");
+        stockNames[19] = "The Travelers Companies, Inc. (TRV)";
         stockCode.put("The Boeing Company (BA)", "BA");
+        stockNames[20] = "The Boeing Company (BA)";
         stockCode.put("Pfizer Inc. (PFE)", "PFE");
+        stockNames[21] = "Pfizer Inc. (PFE)";
         stockCode.put("UnitedHealth Group Incorporated (UNH)", "UNH");
+        stockNames[22] = "UnitedHealth Group Incorporated (UNH)";
         stockCode.put("Wal-Mart Stores Inc. (WMT)", "WMT");
+        stockNames[23] = "Wal-Mart Stores Inc. (WMT)";
         stockCode.put("NIKE, Inc. (NKE)", "NKE");
+        stockNames[24] = "NIKE, Inc. (NKE)";
         stockCode.put("Chevron Corporation (CVX)", "CVX");
+        stockNames[25] = "Chevron Corporation (CVX)";
         stockCode.put("American Express Company (AXP)", "AXP");
+        stockNames[26] = "American Express Company (AXP)";
         stockCode.put("The Walt Disney Company (DIS)", "DIS");
+        stockNames[27] = "The Walt Disney Company (DIS)";
         stockCode.put("The Procter & Gamble Company (PG)", "PG");
+        stockNames[28] = "The Procter & Gamble Company (PG)";
         stockCode.put("Merck & Co., Inc. (MRK)", "MRK");
+        stockNames[29] = "Merck & Co., Inc. (MRK)";
+        
     }
 
 	//Method that parses the CSV file by placing the data into a linked list to be accessed by
@@ -79,6 +105,7 @@ public class Stock
 		try
 		{
 			String line = "";
+			datesWithData = new LinkedList<Data>();
 			//Create the file reader
 			fileReader = new BufferedReader(new FileReader(file));
 
@@ -135,8 +162,11 @@ public class Stock
     public void getStockDataFromYahoo(String stockName,
                                       String startYear, String startMonth, String startDay,
                                       String endYear, String endMonth, String endDay) {
+    	
+    	
         URL url = null;
         InputStreamReader isr = null;
+        
         try {
             // get data through Yahoo Finance API
             url = new URL("http://ichart.yahoo.com/table.csv?s="
@@ -154,21 +184,35 @@ public class Stock
             // write data into CSV file
             char[] buffer = new char[1024];
             int len = 0;
-            File file = new File(stockCode.get(stockName) + "-"
-                    + startYear + "-" + startMonth + "-" + startDay
-                    + "-to-"
-                    + endYear + "-" + endMonth + "-" + endDay
-                    + ".csv");
+            //fileToParse = stockCode.get(stockName) + "-"
+                   // + startYear + "-" + startMonth + "-" + startDay
+                   // + "-to-"
+                   // + endYear + "-" + endMonth + "-" + endDay
+                   // + ".csv";
+            File file = new File(fileToParse);
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file));
             while ((len = isr.read(buffer)) != -1) {
                 out.write(buffer, 0, len);
             }
+            isr.close();
             out.close();
+            parseCSVLineByLine(fileToParse);
+            
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public HashMap<String, String> getStockCodes()
+    {
+    	return stockCode;
+    }
+    
+    public String[] getStockCodeNames()
+    {
+    	return stockNames;
     }
 
 }
