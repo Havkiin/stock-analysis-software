@@ -58,12 +58,14 @@ public class Interface extends JFrame{
 	//Graph page when choosing date and time for moving averages.
 	private JLabel graphWelcomingMessage = new JLabel("Creating Moving Average Graph Page", SwingConstants.CENTER); //Welcoming message
 	private JButton goBack = new JButton("Go Back"); //Button to go back to menu
-	private String[] stocks = new String[30], timePeriod = {"20 days", "50 days", "100 days", "200 days"}; //Options for combo boxes
+	private String[] stocks = new String[30]; //To store names of stocks
 	private JButton bgraph2 = new JButton("Graph"); //Button to graph the user's preference in historical data and moving average.
 	private String[] graphConditions = {"Exxon Mobil Corporation (XOM)","1 year", "20 days"}, historicalData = {"1 year", "2 years", "5 years", "All years"}; //Options for combo box
 	private JTextField startYear = new JTextField(10); //Field to enter the starting year for graph
 	private JTextField startMonth = new JTextField(10); //Field to enter the starting month for graph
 	private JTextField startDay = new JTextField(10); //Field to enter the starting day for graph
+	private JCheckBox twenty, fifty, hundred, twoHundred; //Options for check boxes for moving average
+	private boolean boolForMA[] = {false,false,false,false}; //For 20, 50, 100 and 200 days respectively
 
 	//Constructor that sets up the initial welcoming screen.
 	public Interface() 
@@ -335,7 +337,7 @@ public class Interface extends JFrame{
 				JLabel tellUserToEnterDay = new JLabel("Day:");
 				startDay.setText("DD");
 				JLabel tellUserToEnterYear = new JLabel("See historical data within the last:");
-				JLabel tellUserToChooseTime = new JLabel("Pick moving average predefined as:");
+				JLabel tellUserToChooseTime = new JLabel("Pick moving averages predefined as:");
 
 				for(int i = 0; i < 30; i++)
 					stocks[i] = stock.getStockCodeNames()[i];
@@ -364,16 +366,57 @@ public class Interface extends JFrame{
 						graphConditions[1] = numOfYears;
 					}
 				});
-
-				//Create a combo box for moving average predefined 20, 50, 100 and 200 days and lets user choose an option.
-				JComboBox timeSpanList = new JComboBox(timePeriod);
-				timeSpanList.addActionListener(new ActionListener() 
+				
+				//Create a check box for moving average predefined 20, 50, 100 and 200 days and lets user choose multiple options.
+				twenty = new JCheckBox("20 days");
+				twenty.addActionListener(new ActionListener() 
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
-						JComboBox cb = (JComboBox)e.getSource();
-						String time = (String)cb.getSelectedItem();		
-						graphConditions[2] = time;
+						JCheckBox cb = (JCheckBox)e.getSource();
+						if (cb.isSelected( ))
+				            boolForMA[0] = true;
+						else
+							boolForMA[0] = false;
+					}
+				});
+				
+				fifty = new JCheckBox("50 days");
+				fifty.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						JCheckBox cb = (JCheckBox)e.getSource();
+						if (cb.isSelected( ))
+				            boolForMA[1] = true;
+						else
+							boolForMA[1] = false;
+					}
+				});
+				
+				hundred = new JCheckBox("100 days");
+				hundred.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						JCheckBox cb = (JCheckBox)e.getSource();
+						if (cb.isSelected( ))
+				            boolForMA[2] = true;
+						else
+							boolForMA[2] = false;
+					}
+				});
+				
+				twoHundred = new JCheckBox("200 days");
+				twoHundred.addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						JCheckBox cb = (JCheckBox)e.getSource();
+						if (cb.isSelected( ))
+				            boolForMA[3] = true;
+						else
+							boolForMA[3] = false;
 					}
 				});
 
@@ -394,8 +437,11 @@ public class Interface extends JFrame{
 				startDay.setBounds(400,195,50,20);
 				tellUserToEnterYear.setBounds(50,250,400,20);
 				numOfYearsList.setBounds(255,250,100,20);
-				tellUserToChooseTime.setBounds(50,470,400,20);
-				timeSpanList.setBounds(60,500,150,20);
+				tellUserToChooseTime.setBounds(50,300,400,20);
+				twenty.setBounds(50,340,200,20);
+				fifty.setBounds(50,360,200,20);
+				hundred.setBounds(50,380,200,20);
+				twoHundred.setBounds(50,400,200,20);
 				bgraph2.setBounds(350,500,200,20);
 
 				graphPanel.add(graphWelcomingMessage);
@@ -412,8 +458,12 @@ public class Interface extends JFrame{
 				graphPanel.add(numOfYearsList);
 				graphPanel.add(tellUserToChooseTime);
 				graphPanel.add(stockList);
-				graphPanel.add(timeSpanList);
+				graphPanel.add(twenty);
+				graphPanel.add(fifty);
+				graphPanel.add(hundred);
+				graphPanel.add(twoHundred);
 				graphPanel.add(bgraph2);
+				
 
 				contain.removeAll(); //removes the previous panel and adds this one (to show new screen).
 				contain.add(graphPanel);
@@ -502,10 +552,14 @@ public class Interface extends JFrame{
 					}
 					else if((yearMinusnumOfYears >= 1900 && yearMinusnumOfYears <= 2016))
 					{
+						
 
 						//calculate the moving average
 						try {
+							
 							calculatingMA(year, yearMinusnumOfYears, month, day); //Calculates the MA of the historical data.
+						    
+							
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -554,46 +608,73 @@ public class Interface extends JFrame{
 	}
 
 	//Method to calculate the moving average by taking the starting year and time span of the historical data.
-	public void calculatingMA(int year, int startingYearOnGraph, int month, int day) throws IOException
+	public boolean calculatingMA(int year, int startingYearOnGraph, int month, int day) throws IOException
 	{
 		//create a CSV file from yahoo API based on user's desired inputs
-		stock.getStockDataFromYahoo(graphConditions[0], Integer.toString(startingYearOnGraph), Integer.toString(month), Integer.toString(day), 
-				Integer.toString(year), Integer.toString(month), Integer.toString(day));
-
-		//Used to figure out the number of data for this particular graph by going through the years defined by user.
-		int tempCounter = 0; //stores number of data points.
-
-		for(int i = stock.getAllClosingPrices().size() - 1; i >= 0; i--)			
+		if(stock.getStockDataFromYahoo(graphConditions[0], Integer.toString(startingYearOnGraph), Integer.toString(month), Integer.toString(day), 
+				Integer.toString(year), Integer.toString(month), Integer.toString(day)))
 		{
-			tempCounter++;
+			//Used to figure out the number of data for this particular graph by going through the years defined by user.
+			int tempCounter = 0; //stores number of data points.
+
+			for(int i = stock.getAllClosingPrices().size() - 1; i >= 0; i--)			
+			{
+				tempCounter++;
+			}
+
+			double[] closingPricesdataset = new double[tempCounter]; //Stores the array of closing prices within the data set.
+			String[] dateNameofdataset = new String[tempCounter]; //Stores the dates associated with the closing prices as strings.
+			int counter = 0; //index for array when adding elements.
+			double[] highPrices = new double[tempCounter];
+			double[] lowPrices = new double[tempCounter];
+			double[] openPrices = new double[tempCounter];
+			double[] volume = new double[tempCounter];
+
+			for(int i = stock.getAllClosingPrices().size() - 1; i >= 0; i--)			
+			{
+				//store every close price in data set within the graph range.
+				closingPricesdataset[counter] = stock.getAllClosingPrices().get(i).getClose();
+
+				//Stores every open price in data set within graph range.
+				openPrices[counter] = stock.getAllClosingPrices().get(i).getOpen();
+				
+				//Stores every high price in data set within graph range.
+				highPrices[counter] = stock.getAllClosingPrices().get(i).getHigh();
+				
+				//Stores every low price in data set within graph range.
+				lowPrices[counter] = stock.getAllClosingPrices().get(i).getLow();
+				
+				//Stores every volume in data set within graph range.
+				volume[counter] = stock.getAllClosingPrices().get(i).getVolume();
+				
+				//Store every date within the data set of the graph.
+				dateNameofdataset[counter] = stock.getAllClosingPrices().get(i).getDate();
+
+				counter++;
+			}
+
+			displayGraph(closingPricesdataset, dateNameofdataset, highPrices, lowPrices, openPrices, volume); //starts graphing process
+			return true;
+		}
+		else
+		{
+			//Displays an error message to the user and starts the process over again.							
+			JOptionPane.showMessageDialog(null,"Yahoo couldn't find the dataset");
+			startYear.setText("");
+			startMonth.setText("");
+			startDay.requestFocus();
+			
+			return false;
 		}
 
-		MovingAverages ma = new MovingAverages();//used to access method to calculate the ma.
-		String[] temp = graphConditions[2].split(" "); 
-		int timeSpanMovingAverage = Integer.parseInt(temp[0]); //turn predefined number of days (string) into an integer.
-		double[] closingPricesdataset = new double[tempCounter]; //Stores the array of closing prices within the data set.
-		String[] dateNameofdataset = new String[tempCounter]; //Stores the dates associated with the closing prices as strings.
-		int counter = 0; //index for array when adding elements.
-
-		for(int i = stock.getAllClosingPrices().size() - 1; i >= 0; i--)			
-		{
-			//store every close price in data set within the graph range.
-			closingPricesdataset[counter] = stock.getAllClosingPrices().get(i).getClose();
-
-			//Store every date within the data set of the graph.
-			dateNameofdataset[counter] = stock.getAllClosingPrices().get(i).getDate();
-
-			counter++;
-		}
-
-		double[] datasetForMovingAverage = ma.simpleMovingAverage(closingPricesdataset, timeSpanMovingAverage); //calculates
-		displayGraph(datasetForMovingAverage,closingPricesdataset, dateNameofdataset, timeSpanMovingAverage); //starts graphing process
+		
 	}
 
 	//Method to display the graph by instantiating it and creating one. Takes in the array of moving averages, the 
 	//array of closing prices, the dates associated with the closing prices and the time predefined for moving average.
-	public void displayGraph(double[] maDataset, double[] histDataset, String[] dateNameofdataset, int timePeriod)
+	public void displayGraph(double[] histDataset, String[] dateNameofdataset, double[] highDataset, double[] lowDataset, double[] openDataset,double[] volume)
 	{
-		Graph graph = new Graph("Simple Moving Average Graph", maDataset, histDataset, dateNameofdataset, timePeriod);
+		String title = "Moving Average Graph of " + graphConditions[0];
+		Graph graph = new Graph(title, histDataset, dateNameofdataset, highDataset, lowDataset, openDataset, volume, graphConditions[0], boolForMA);
 	}
 }
