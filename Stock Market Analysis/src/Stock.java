@@ -159,7 +159,7 @@ public class Stock
      * @param endDay DD (from 1 to 31)
      * Last update: November 18, 2016
      */
-    public void getStockDataFromYahoo(String stockName,
+    public boolean getStockDataFromYahoo(String stockName,
                                       String startYear, String startMonth, String startDay,
                                       String endYear, String endMonth, String endDay) {
     	
@@ -197,11 +197,17 @@ public class Stock
             isr.close();
             out.close();
             parseCSVLineByLine(fileToParse);
+            return true;
             
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException e) 
+        {
+        	 e.printStackTrace();
+        	return false;
+           
+        } catch (IOException e) 
+        {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
     }
     
